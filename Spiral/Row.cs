@@ -15,10 +15,14 @@ namespace Spiral
 
             for (int i = 0; i < Elements.Length; i++)
             {
-                Elements[i] = new Element<T>(default);
+                Elements[i] = default;
             }
         }
 
-        public Element<T> this[int index] => Elements[index];
+        public Element<T> this[int index]
+        {
+            get => Elements[index];
+            set => Elements[index] = value;
+        }
     }
 }

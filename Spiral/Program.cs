@@ -7,7 +7,6 @@ namespace Spiral
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
             Spiral.doSomething();
         }
     }
@@ -16,12 +15,12 @@ namespace Spiral
     {
         public static void doSomething()
         {
-            var mat = new Matrix<int>(5, 5);
+            var mat = new Matrix<string>(5, 5);
             for (int i = 0; i < mat.RowSize; i++)
             {
                 for (int j = 0; j < mat[i].Size; j++)
                 {
-                    mat[i][j].Value = int.Parse(i.ToString() + j.ToString());
+                    mat[i][j] = (i.ToString() + j.ToString());
                 }
             }
 

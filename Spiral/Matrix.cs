@@ -34,34 +34,51 @@ namespace Spiral
         {
             List<T> Result = new List<T>();
             int row = 0;
-            int col = 0;
-            PathDirection direction = PathDirection.LTR;
+            int col = -1;
+            PathDirection direction = PathDirection.LTR;         
 
-            bool listCompleted = false;
+            while (RowSize * ColSize > Result.Count)
+            {
+                switch (direction)
+                {
+                    case PathDirection.LTR:
+                        visit(false, true, true);
+                        direction = PathDirection.TTB;
+                        break;
+                    case PathDirection.RTL:
+                        visit(false, true, false);
+                        direction = PathDirection.BTT;
+                        break;
+                    case PathDirection.TTB:
+                        visit(true, false, true);
+                        direction = PathDirection.RTL;
+                        break;
+                    case PathDirection.BTT:
+                        visit(true, false, false);
+                        direction = PathDirection.LTR;
+                        break;
+                    default:
+                        break;
+                }
+
+
+
+            }
+
+            return Result;
 
             void visit(bool movRow, bool movCol, bool positiveDir)
             {
-                #region Checking if completed
                 int trow = row, tcol = col;
-
-                GetPos();
-                var testElement = this[trow, tcol];
-                if (testElement.Visited == true)
-                {
-                    listCompleted = true;
-                    return;
-                } 
-                #endregion
-
-                trow = row;
-                tcol = col;
 
                 while (true)
                 {
                     //try new position
-                    #region Decide Row and Column
-                    GetPos();
-                    #endregion
+                    GetNextPos();
+                    if (!isPositionFeasable())
+                    {
+                        break;
+                    }
 
                     var element = this[trow, tcol];
                     if (element.Visited == false)
@@ -76,57 +93,34 @@ namespace Spiral
 
                     else { break; }
                 }
-                    void GetPos()
+                void GetNextPos()
+                {
+                    if (positiveDir)
                     {
-                        if (positiveDir)
+                        if (movRow)
                         {
-                            if (movRow)
-                            {
-                                trow++;
-                            }
-                            else if (movCol)
-                            {
-                                tcol++;
-                            }
+                            trow++;
                         }
-
-                        else
+                        else if (movCol)
                         {
-                            if (movRow)
-                            {
-                                trow--;
-                            }
-                            else if (movCol)
-                            {
-                                tcol--;
-                            }
+                            tcol++;
                         }
                     }
-                
-            }
 
-            while (!listCompleted)
-            {
-                switch (direction)
-                {
-                    case PathDirection.LTR:
-                        visit(false, true, true);
-                        break;
-                    case PathDirection.RTL:
-                        visit(false, true, false);
-                        break;
-                    case PathDirection.TTB:
-                        visit(true, false, true);
-                        break;
-                    case PathDirection.BTT:
-                        visit(true, false, false);
-                        break;
-                    default:
-                        break;
+                    else
+                    {
+                        if (movRow)
+                        {
+                            trow--;
+                        }
+                        else if (movCol)
+                        {
+                            tcol--;
+                        }
+                    }
                 }
+                bool isPositionFeasable() => (trow < RowSize && trow > -1) && (tcol < ColSize && tcol > -1);
             }
-
-            return Result;
         }
     }
 }
